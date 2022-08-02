@@ -14,7 +14,8 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   },
 })
 
-class Note extends Model {}
+
+class Note extends Model { }
 Note.init({
   id: {
     type: DataTypes.INTEGER,
@@ -46,9 +47,12 @@ app.get('/api/notes', async (req, res) => {
 
 
 app.post('/api/notes', async (req, res) => {
-  console.log(req.body)
-  const note = await Note.create(req.body)
-  res.json(note)
+  try {
+    const note = await Note.create(req.body)
+    return res.json(note)
+  } catch (error) {
+    return res.status(400).json({ error })
+  }
 })
 
 const PORT = process.env.PORT || 3001
