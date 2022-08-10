@@ -61,9 +61,22 @@ app.post('/api/notes', async (req, res) => {
 app.get('/api/notes/:id', async (req, res) => {
   const note = await Note.findByPk(req.params.id)
   if (note) {
+    console.log(note)
     res.json(note)
   } else {
     res.status(404).end()
+  }
+})
+
+
+app.delete('/api/notes/:id', async (req, res) => {
+  const note = await Note.findByPk(req.params.id)
+  if (note) {
+    console.log(note)
+    // res.json(note)
+    await note.destroy()
+  } else {
+    res.status(204).end()
   }
 })
 
