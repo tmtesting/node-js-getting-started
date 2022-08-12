@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
   res.json(notes)
 })
 
-
 router.post('/', async (req, res) => {
   try {
     const note = await Note.create(req.body)
@@ -18,37 +17,39 @@ router.post('/', async (req, res) => {
   }
 })
 
+const noteFinder = async (req, res, next) => {
+  req.note = await Note.findByPk(req.params.id)
+}
 
-router.get('/:id', async (req, res) => {
-  const note = await Note.findByPk(req.params.id)
-  if (note) {
-    console.log(note)
-    res.json(note)
+router.get('/:id', noteFinder, async (req, res) => {
+  // const note = await Note.findByPk(req.params.id)
+  if (req.note) {
+    console.log(req.note)
+    res.json(req.note)
   } else {
     res.status(404).end()
   }
 })
 
-
-router.delete('/:id', async (req, res) => {
-  const note = await Note.findByPk(req.params.id)
-  if (note) {
-    console.log(note)
-    await note.destroy()
+router.delete('/:id', noteFinder, async (req, res) => {
+  // const note = await Note.findByPk(req.params.id)
+  if (req.note) {
+    console.log(req.note)
+    await req.note.destroy()
   } else {
     res.status(204).end()
   }
 })
 
-router.put('/:id', async (req, res) => {
-    const note = await Note.findByPk(req.params.id)
-    if (note) {
-        note.important = req.body.important
-        await note.note.save()
-        res.json(note)
-    } else {
-        res.status(404).end()
-    }
+router.put('/:id', noteFinder, async (req, res) => {
+  // const note = await Note.findByPk(req.params.id)
+  if (req.note) {
+    req.note.important = req.body.important
+    await req.note.note.save()
+    res.json(req.note)
+  } else {
+    res.status(404).end()
+  }
 })
 
 module.exports = router
