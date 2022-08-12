@@ -19,6 +19,7 @@ router.post('/', async (req, res) => {
 
 const noteFinder = async (req, res, next) => {
   req.note = await Note.findByPk(req.params.id)
+  next()
 }
 
 router.get('/:id', noteFinder, async (req, res) => {
