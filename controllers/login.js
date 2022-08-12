@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 
 const { SECRET } = require('../util/config')
+const { SECPAS } = require('../util/config')
 const User = require('../models/user')
 // const { response } = require('express')
 
@@ -15,7 +16,8 @@ router.post('/', async (request, response) => {
     }
   })
 
-  const passwordCorrect = body.password === 'salainenko'
+
+  const passwordCorrect = body.password === SECPAS
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({
